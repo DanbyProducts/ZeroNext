@@ -42,7 +42,7 @@ namespace Serial_Number_Generator
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //okay
+            
         }
     }
 }
