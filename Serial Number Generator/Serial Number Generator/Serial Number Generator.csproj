@@ -74,6 +74,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="ZeroNext %28GregHall%29 - LW_DURABLE_25X89mm-Built Code  00.label" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
