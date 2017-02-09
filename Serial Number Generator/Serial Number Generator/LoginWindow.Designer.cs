@@ -35,6 +35,9 @@
             this.Login = new System.Windows.Forms.Button();
             this.UsernameErrorLabel = new System.Windows.Forms.Label();
             this.PasswordErrorLabel = new System.Windows.Forms.Label();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // PasswordTb
@@ -97,11 +100,28 @@
             this.PasswordErrorLabel.TabIndex = 11;
             this.PasswordErrorLabel.Text = "Error";
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exitToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(405, 24);
+            this.menuStrip1.TabIndex = 12;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
             // LoginWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(416, 152);
+            this.ClientSize = new System.Drawing.Size(405, 170);
             this.Controls.Add(this.PasswordErrorLabel);
             this.Controls.Add(this.UsernameErrorLabel);
             this.Controls.Add(this.PasswordTb);
@@ -109,8 +129,13 @@
             this.Controls.Add(this.PasswordLabel);
             this.Controls.Add(this.UsernameLabel);
             this.Controls.Add(this.Login);
+            this.Controls.Add(this.menuStrip1);
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "LoginWindow";
             this.Text = "Login";
+          
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -124,6 +149,8 @@
         private System.Windows.Forms.Button Login;
         private System.Windows.Forms.Label UsernameErrorLabel;
         private System.Windows.Forms.Label PasswordErrorLabel;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
     }
 }
 
