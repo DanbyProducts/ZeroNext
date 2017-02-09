@@ -1,6 +1,6 @@
 ﻿namespace Serial_Number_Generator
 {
-    partial class Form1
+    partial class AdminRoles
     {
         /// <summary>
         /// Required designer variable.
@@ -33,7 +33,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(141, 99);
+            this.button1.Location = new System.Drawing.Point(162, 120);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 0;
@@ -41,14 +41,14 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // Form1
+            // AdminRoles
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(460, 330);
+            this.ClientSize = new System.Drawing.Size(424, 187);
             this.Controls.Add(this.button1);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "AdminRoles";
+            this.Text = "AdminRoles";
             this.ResumeLayout(false);
 
         }
@@ -58,4 +58,3 @@
         private System.Windows.Forms.Button button1;
     }
 }
-
