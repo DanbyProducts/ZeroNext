@@ -8,6 +8,7 @@
 
          - DateTime format to store in db is YYYY-MM-DD
          - Perform some sort of check on all functions - bool check
+         - Check duplicate serial numbers
  */
 
 using System;
@@ -27,8 +28,8 @@ namespace Serial_Number_Generator
     public partial class AdminRoles : Form
     {
 
-        public Form RefToLoginForm;
-        private Int32 CurrentUserid;
+        private static Form RefToLoginForm;
+        private static Int32 CurrentUserid;
 
 
         ////Product Codes Format :  Product Code & Product Category
@@ -90,12 +91,14 @@ namespace Serial_Number_Generator
         public AdminRoles(Form form = null, Int32 currentuserid = 0)
         {
             InitializeComponent();
+
             //assign LoginWindow
             RefToLoginForm = form;
-            this.CurrentUserid = currentuserid;
+
+            //currentuserID is using the admin screen
+            CurrentUserid = currentuserid;
+
             //load all factory codes and product codes
-
-
             GetAllAppriseCodesForFactory();
             GetAllProductCodes();    
         }
@@ -136,6 +139,7 @@ namespace Serial_Number_Generator
             catch (MySqlException ex)
             {
                 MessageBox.Show("");
+                //TO-DO
             }
             finally
             {
@@ -165,6 +169,7 @@ namespace Serial_Number_Generator
             catch (MySqlException ex)
             {
                 MessageBox.Show("");
+                //TO-DO
             }
             finally
             {
@@ -188,7 +193,7 @@ namespace Serial_Number_Generator
             catch (MySqlException ex)
             {
                 MessageBox.Show(ex.Message.ToString());
-                
+                //TO-DO
             }
             finally
             {
@@ -196,8 +201,5 @@ namespace Serial_Number_Generator
                     connection.Close();
             }
         }
-
-
-
     }
 }
