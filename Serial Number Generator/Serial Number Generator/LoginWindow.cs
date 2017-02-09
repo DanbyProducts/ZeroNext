@@ -52,6 +52,7 @@ namespace Serial_Number_Generator
     {
 
         static MySqlConnection connection = null;
+        static Int32 currentUserID = 0;
 
         public LoginWindow()
         {
@@ -85,17 +86,25 @@ namespace Serial_Number_Generator
             try
             {
                 MySqlDataReader myreader = null;
-                MySqlCommand command = new MySqlCommand("SELECT * FROM zeronext.userprofiles where Username='" + UsernameTb.Text.ToString() + "' and UserPassword = '" + PasswordTb.Text.ToString() + "';", connection);
+
+                //user has to be active/admin
+                MySqlCommand command = new MySqlCommand("SELECT * FROM zeronext.userprofiles where Username='" + UsernameTb.Text.ToString() + "' and UserPassword = '" + PasswordTb.Text.ToString() + "' and isactive=1;", connection);
                 myreader = command.ExecuteReader();      
                 if (!myreader.HasRows)
                 {
                     return false;
+                }
+                else
+                {
+                    while(myreader.Read())
+                    currentUserID = myreader.GetInt32(0);
                 }
                 
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
+                return false;
             }
             finally
             {
@@ -136,6 +145,7 @@ namespace Serial_Number_Generator
             }catch(MySqlException ex)
             {
                 MessageBox.Show(ex.ToString());
+                return false;
             }
            
             return true;
@@ -143,7 +153,7 @@ namespace Serial_Number_Generator
 
         private void ShowAdminWindow()
         {
-            AdminRoles adminroleswindow = new AdminRoles(this);
+            AdminRoles adminroleswindow = new AdminRoles(this, currentUserID);
             adminroleswindow.Show();
             Hide();
         }
@@ -158,8 +168,6 @@ namespace Serial_Number_Generator
         {
             //exit the application
             this.Close();
-        }
-
-     
+        }    
     }
 }

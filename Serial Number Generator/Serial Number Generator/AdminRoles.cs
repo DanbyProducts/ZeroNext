@@ -7,6 +7,7 @@
          - Log all exceptions
 
          - DateTime format to store in db is YYYY-MM-DD
+         - Perform some sort of check on all functions - bool check
  */
 
 using System;
@@ -27,6 +28,8 @@ namespace Serial_Number_Generator
     {
 
         public Form RefToLoginForm;
+        private Int32 CurrentUserid;
+
 
         ////Product Codes Format :  Product Code & Product Category
         //private string[,] ProductCodes = new string[28, 2]
@@ -84,12 +87,12 @@ namespace Serial_Number_Generator
         //};
 
 
-        public AdminRoles(Form form = null)
+        public AdminRoles(Form form = null, Int32 currentuserid = 0)
         {
             InitializeComponent();
             //assign LoginWindow
             RefToLoginForm = form;
-
+            this.CurrentUserid = currentuserid;
             //load all factory codes and product codes
 
 
@@ -172,8 +175,29 @@ namespace Serial_Number_Generator
 
         private void CreateSerialNumberButton_Click(object sender, EventArgs e)
         {
-            Random random = new Random();
-            SerialNumberCreatedLabel.Text = random.Next(1,100000).ToString(); 
+            MySqlConnection connection = null;
+            try
+            {
+                connection = new MySqlConnection("Server=localhost;Database=zeronext;UID=root;Password=admin");
+                connection.Open();
+                               
+                MySqlCommand command = new MySqlCommand("INSERT INTO serialnumbers (serialnumbers.SerialNumber,serialnumbers.ProductCode,serialnumbers.ProductCategory,serialnumbers.FactoryID,serialnumbers.FactoryAppriseCodes,serialnumbers.SerialCreationDate, CreatedBy) values(1234567891234, 34, 'Freezer Chest', 43, 'XINGXI', '2017/02/08'," + CurrentUserid + "); ", connection);
+                int a = command.ExecuteNonQuery();
+                
+            }
+            catch (MySqlException ex)
+            {
+                MessageBox.Show(ex.Message.ToString());
+                
+            }
+            finally
+            {
+                if (connection != null)
+                    connection.Close();
+            }
         }
+
+
+
     }
 }
