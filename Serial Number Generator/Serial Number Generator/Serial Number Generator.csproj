@@ -52,6 +52,7 @@
     <Compile Include="AdminRoles.Designer.cs">
       <DependentUpon>AdminRoles.cs</DependentUpon>
     </Compile>
+    <Compile Include="Constants.cs" />
     <Compile Include="LoginWindow.cs">
       <SubType>Form</SubType>
     </Compile>

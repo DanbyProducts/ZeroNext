@@ -4,11 +4,15 @@
          - What if user close this windows by clicking red cross button, then paren windwow (login) will still be there.  
          - Create serial Number, add in DB, show print label button, print the label, 
          - Check exception messages, and handle exceptions 
-         - Log all exceptions
+         - Log all exceptions.
 
          - DateTime format to store in db is YYYY-MM-DD
          - Perform some sort of check on all functions - bool check
          - Check duplicate serial numbers
+         - Create a function to keep mysql connection, dont connect everytime in a new function ( try putting in admin static class).
+         - Check for custom exceptions
+         - check for all values ( class members )  their values before using it. like if it null/0/empty
+         - check if serial numbers table is empty or not, to insert first row
  */
 
 using System;
@@ -25,11 +29,9 @@ using MySql.Data.MySqlClient;
 
 namespace Serial_Number_Generator
 {
+
     public partial class AdminRoles : Form
     {
-
-        private static Form RefToLoginForm;
-        private static Int32 CurrentUserid;
 
 
         ////Product Codes Format :  Product Code & Product Category
@@ -92,15 +94,24 @@ namespace Serial_Number_Generator
         {
             InitializeComponent();
 
-            //assign LoginWindow
-            RefToLoginForm = form;
+            //checking
+            if (form != null && currentuserid != 0)
+            {
+                //assign LoginWindow
+                AdminClass.RefToLoginForm = form;
 
-            //currentuserID is using the admin screen
-            CurrentUserid = currentuserid;
+                //currentuserID is using the admin screen
+                AdminClass.CurrentUserid = currentuserid;
 
-            //load all factory codes and product codes
-            GetAllAppriseCodesForFactory();
-            GetAllProductCodes();    
+                //load all factory codes and product codes
+                if(GetAllAppriseCodesForFactory())
+                    GetAllProductCodes();
+            }
+            else
+            {
+                //something went wrong from login window to adminwindow
+                MessageBox.Show("Something went wrong. Try Again");
+            }
         }
 
        
@@ -108,17 +119,17 @@ namespace Serial_Number_Generator
         private void logOutToolStripMenuItem_Click(object sender, EventArgs e)
         {        
             MessageBox.Show("Logged Out");
-            RefToLoginForm.Show();
+            AdminClass.RefToLoginForm.Show();
             Close();
         }
 
         private void AdminRoles_FormClosing(object sender, FormClosingEventArgs e)
         {
-            RefToLoginForm.Show();
+            AdminClass.RefToLoginForm.Show();
         }
 
 
-        private void GetAllAppriseCodesForFactory()
+        private bool GetAllAppriseCodesForFactory()
         {
             MySqlConnection connection = null;
             try
@@ -138,14 +149,16 @@ namespace Serial_Number_Generator
             }
             catch (MySqlException ex)
             {
-                MessageBox.Show("");
-                //TO-DO
+                //-//Log exception 
+                MessageBox.Show("Getting Apprise Codes Error.");
+                return false;
             }
             finally
             {
                 if (connection != null)
                     connection.Close();
             }
+            return true;
         }
 
         private void GetAllProductCodes()
@@ -168,38 +181,155 @@ namespace Serial_Number_Generator
             }
             catch (MySqlException ex)
             {
-                MessageBox.Show("");
-                //TO-DO
+                //-//Log exception 
+                MessageBox.Show("Getting Product Codes Error.");                
+            }
+            finally
+            {
+                if (connection != null)
+                    connection.Close();
+            }            
+        }
+
+        private void CreateSerialNumberButton_Click(object sender, EventArgs e)
+        {
+            if (GetFormData())
+            {
+                Int64 serialnumber = SerialNumberQuery();
+
+                //Length is 13. Not first time serial number for this product code
+                if (serialnumber.ToString().Length == Constants.SERIALNUMBERLENTH)
+                {
+                    //check the serial as per business reqs before incrementing and inserting into db.
+                              
+                                
+                }
+                //first time serial number for this product code 
+                else
+                {
+                    //first serial number for this product code
+                    //create first time serial number for this category
+                    
+                    
+
+                }
+
+                InsertSerialNumberToDb(serialnumber);
+            }
+        }
+
+
+        private bool GetFormData()
+        {
+            try
+            {
+                if (FactoryIDComboBox.SelectedIndex == -1)
+                {
+                    FactoryIDErrorLabel.Text = "*";
+                }
+                else
+                {
+                    FactoryIDErrorLabel.Text = "";
+                    AdminClass.FactoryAppriseCode = FactoryIDComboBox.SelectedItem.ToString();
+                }
+
+                if (ProductIDComboBox.SelectedIndex == -1)
+                {
+                    ProductIDErrorLabel.Text = "*";
+                }
+                else
+                {
+                    ProductIDErrorLabel.Text = "";
+                    Int32.TryParse(ProductIDComboBox.SelectedItem.ToString(), out AdminClass.ProductCode);
+                }
+                if (FactoryIDComboBox.SelectedIndex == -1 || ProductIDComboBox.SelectedIndex == -1)
+                    return false;
+            }
+            catch(Exception ex)
+            {
+                //-//Log exception
+                MessageBox.Show("Something went wrong. Try Again!"); 
+            }
+            return true;
+        }
+
+        private static Int64 SerialNumberQuery()
+        {
+            //get last serial number created in a product category
+
+            Int64 lastserialnumberofproductcategory = 0;
+
+            //get last serial number of each product category
+            MySqlConnection connection = null;
+            try
+            {
+                MySqlDataReader myreader = null;
+                connection = new MySqlConnection("Server=localhost;Database=zeronext;UID=root;Password=admin");
+                connection.Open();
+
+                MySqlCommand command = new MySqlCommand("SELECT SerialNumber FROM serialnumbers where ProductCode=" + AdminClass.ProductCode + " Order by serialNumberID desc limit 1;", connection);
+
+                myreader = command.ExecuteReader();
+                if (myreader.HasRows)
+                {
+                    while (myreader.Read())
+                    {
+                        lastserialnumberofproductcategory = myreader.GetInt64(0);
+                    }
+                }
+                else
+                {
+                    return 1;
+                }
+            }
+            catch (MySqlException ex)
+            {
+                //-//Log exception 
+                MessageBox.Show(ex.Message.ToString());
+                return 0;
             }
             finally
             {
                 if (connection != null)
                     connection.Close();
             }
+            return lastserialnumberofproductcategory;
         }
 
-        private void CreateSerialNumberButton_Click(object sender, EventArgs e)
+
+        //make it static
+        private bool InsertSerialNumberToDb(Int64 serialnumber)
         {
             MySqlConnection connection = null;
             try
             {
                 connection = new MySqlConnection("Server=localhost;Database=zeronext;UID=root;Password=admin");
                 connection.Open();
-                               
-                MySqlCommand command = new MySqlCommand("INSERT INTO serialnumbers (serialnumbers.SerialNumber,serialnumbers.ProductCode,serialnumbers.ProductCategory,serialnumbers.FactoryID,serialnumbers.FactoryAppriseCodes,serialnumbers.SerialCreationDate, CreatedBy) values(1234567891234, 34, 'Freezer Chest', 43, 'XINGXI', '2017/02/08'," + CurrentUserid + "); ", connection);
+
+                MySqlCommand command = new MySqlCommand("INSERT INTO serialnumbers (serialnumbers.SerialNumber,serialnumbers.ProductCode,serialnumbers.FactoryID,serialnumbers.SerialCreationDate, CreatedBy) values(" + (serialnumber++) + ", " + AdminClass.ProductCode + ", 43, '2017/02/08'," + AdminClass.CurrentUserid + "); ", connection);
                 int a = command.ExecuteNonQuery();
-                
             }
             catch (MySqlException ex)
             {
+                //-//Log exception 
                 MessageBox.Show(ex.Message.ToString());
-                //TO-DO
+                return false;
+             
             }
             finally
             {
                 if (connection != null)
                     connection.Close();
             }
+            return true;
         }
+    }
+
+    public static class AdminClass
+    {
+        public static Form RefToLoginForm = null;
+        public static Int32 CurrentUserid = 0;
+        public static Int32 ProductCode = 0;
+        public static string FactoryAppriseCode = string.Empty;
     }
 }

@@ -37,6 +37,9 @@
             this.FactoryIDLabel = new System.Windows.Forms.Label();
             this.ProductIDLabel = new System.Windows.Forms.Label();
             this.SerialNumberCreatedLabel = new System.Windows.Forms.Label();
+            this.FactoryIDErrorLabel = new System.Windows.Forms.Label();
+            this.ProductIDErrorLabel = new System.Windows.Forms.Label();
+            this.test = new System.Windows.Forms.TextBox();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -56,7 +59,7 @@
             this.logOutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(293, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(304, 24);
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -117,15 +120,45 @@
             this.SerialNumberCreatedLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SerialNumberCreatedLabel.Location = new System.Drawing.Point(70, 159);
             this.SerialNumberCreatedLabel.Name = "SerialNumberCreatedLabel";
-            this.SerialNumberCreatedLabel.Size = new System.Drawing.Size(164, 16);
+            this.SerialNumberCreatedLabel.Size = new System.Drawing.Size(161, 16);
             this.SerialNumberCreatedLabel.TabIndex = 8;
             this.SerialNumberCreatedLabel.Text = "Serial number created";
+            // 
+            // FactoryIDErrorLabel
+            // 
+            this.FactoryIDErrorLabel.AutoSize = true;
+            this.FactoryIDErrorLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FactoryIDErrorLabel.ForeColor = System.Drawing.Color.Red;
+            this.FactoryIDErrorLabel.Location = new System.Drawing.Point(255, 65);
+            this.FactoryIDErrorLabel.Name = "FactoryIDErrorLabel";
+            this.FactoryIDErrorLabel.Size = new System.Drawing.Size(0, 18);
+            this.FactoryIDErrorLabel.TabIndex = 9;
+            // 
+            // ProductIDErrorLabel
+            // 
+            this.ProductIDErrorLabel.AutoSize = true;
+            this.ProductIDErrorLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ProductIDErrorLabel.ForeColor = System.Drawing.Color.Red;
+            this.ProductIDErrorLabel.Location = new System.Drawing.Point(255, 92);
+            this.ProductIDErrorLabel.Name = "ProductIDErrorLabel";
+            this.ProductIDErrorLabel.Size = new System.Drawing.Size(0, 18);
+            this.ProductIDErrorLabel.TabIndex = 9;
+            // 
+            // test
+            // 
+            this.test.Location = new System.Drawing.Point(128, 117);
+            this.test.Name = "test";
+            this.test.Size = new System.Drawing.Size(121, 20);
+            this.test.TabIndex = 10;
             // 
             // AdminRoles
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(293, 330);
+            this.ClientSize = new System.Drawing.Size(304, 330);
+            this.Controls.Add(this.test);
+            this.Controls.Add(this.ProductIDErrorLabel);
+            this.Controls.Add(this.FactoryIDErrorLabel);
             this.Controls.Add(this.SerialNumberCreatedLabel);
             this.Controls.Add(this.ProductIDLabel);
             this.Controls.Add(this.FactoryIDLabel);
@@ -155,5 +188,8 @@
         private System.Windows.Forms.Label FactoryIDLabel;
         private System.Windows.Forms.Label ProductIDLabel;
         private System.Windows.Forms.Label SerialNumberCreatedLabel;
+        private System.Windows.Forms.Label FactoryIDErrorLabel;
+        private System.Windows.Forms.Label ProductIDErrorLabel;
+        private System.Windows.Forms.TextBox test;
     }
 }

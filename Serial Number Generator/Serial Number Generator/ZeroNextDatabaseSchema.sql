@@ -17,9 +17,7 @@ CREATE TABLE SerialNumbers (
 serialNumberID int8 not null auto_increment,
 SerialNumber int8 not null unique,
 ProductCode int4 not null,
-ProductCategory varchar(100) not null,
 FactoryID int3 not null,
-FactoryAppriseCodes varchar(20) not null,
 SerialCreationDate date,
 CreatedBy int8 not null,
 primary key (serialNumberID),
@@ -45,11 +43,6 @@ ProductCode int4 not null,
 ProductCategory varchar(50)
 );
 
-
-use zeronext;
-
-INSERT INTO serialnumbers (serialnumbers.SerialNumber,serialnumbers.ProductCode,serialnumbers.ProductCategory,serialnumbers.FactoryID,serialnumbers.FactoryAppriseCodes,serialnumbers.SerialCreationDate)
-values (1234567891234,34,'Freezer Chest',43,'XINGXI','2017/02/08');
 
 use zeronext;
 
