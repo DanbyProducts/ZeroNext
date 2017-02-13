@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serial Number Generator", "Serial Number Generator\Serial Number Generator.csproj", "{1C1734C8-68F4-4754-A609-5830C4D60829}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serial Number GeneratorTests", "Serial Number GeneratorTests\Serial Number GeneratorTests.csproj", "{4DBC11C4-8E65-4BEF-9442-1D73437C2192}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{1C1734C8-68F4-4754-A609-5830C4D60829}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C1734C8-68F4-4754-A609-5830C4D60829}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C1734C8-68F4-4754-A609-5830C4D60829}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DBC11C4-8E65-4BEF-9442-1D73437C2192}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DBC11C4-8E65-4BEF-9442-1D73437C2192}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DBC11C4-8E65-4BEF-9442-1D73437C2192}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DBC11C4-8E65-4BEF-9442-1D73437C2192}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

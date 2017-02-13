@@ -40,6 +40,7 @@
             this.FactoryIDErrorLabel = new System.Windows.Forms.Label();
             this.ProductIDErrorLabel = new System.Windows.Forms.Label();
             this.test = new System.Windows.Forms.TextBox();
+            this.Create = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -72,13 +73,13 @@
             // 
             // PrintLabelBtn
             // 
-            this.PrintLabelBtn.Location = new System.Drawing.Point(89, 251);
+            this.PrintLabelBtn.Location = new System.Drawing.Point(89, 280);
             this.PrintLabelBtn.Name = "PrintLabelBtn";
             this.PrintLabelBtn.Size = new System.Drawing.Size(122, 23);
             this.PrintLabelBtn.TabIndex = 3;
             this.PrintLabelBtn.Text = "Print Label";
             this.PrintLabelBtn.UseVisualStyleBackColor = true;
-            this.PrintLabelBtn.Visible = false;
+            this.PrintLabelBtn.Click += new System.EventHandler(this.PrintLabelBtn_Click);
             // 
             // FactoryIDComboBox
             // 
@@ -151,11 +152,22 @@
             this.test.Size = new System.Drawing.Size(121, 20);
             this.test.TabIndex = 10;
             // 
+            // Create
+            // 
+            this.Create.Location = new System.Drawing.Point(89, 251);
+            this.Create.Name = "Create";
+            this.Create.Size = new System.Drawing.Size(122, 23);
+            this.Create.TabIndex = 11;
+            this.Create.Text = "Create";
+            this.Create.UseVisualStyleBackColor = true;
+            this.Create.Click += new System.EventHandler(this.Create_Click);
+            // 
             // AdminRoles
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(304, 330);
+            this.Controls.Add(this.Create);
             this.Controls.Add(this.test);
             this.Controls.Add(this.ProductIDErrorLabel);
             this.Controls.Add(this.FactoryIDErrorLabel);
@@ -191,5 +203,6 @@
         private System.Windows.Forms.Label FactoryIDErrorLabel;
         private System.Windows.Forms.Label ProductIDErrorLabel;
         private System.Windows.Forms.TextBox test;
+        private System.Windows.Forms.Button Create;
     }
 }

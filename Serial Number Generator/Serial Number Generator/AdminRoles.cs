@@ -14,15 +14,11 @@
          - check for all values ( class members )  their values before using it. like if it null/0/empty
          - check if serial numbers table is empty or not, to insert first row
          - Get todays' date + product code + month + year + factory code + serial number
+         - Check all the variables and their daa type and match with the database schema
+         - Check for all message boxes.
 
 
-
-
-TOMMORROW         - RUN THE QUERY FOR EMPTY PRODCUT CODE WHICH HAS NONE ROWS
-                        - this will be first time serial number generation
-                        - create it by getting month + 
-
-
+TESTING  - if max serial numbers are created this month or not.
 
  */
 
@@ -149,11 +145,11 @@ namespace Serial_Number_Generator
                 connection.Open();
 
                 MySqlDataReader myreader = null;
-                MySqlCommand command = new MySqlCommand("select apprisecodes from factoryids where AppriseCodes != '';", connection);
+                MySqlCommand command = new MySqlCommand("select FactoryID from factoryids where AppriseCodes != '';", connection);
                 myreader = command.ExecuteReader();
                 if (myreader.HasRows)
                 {
-                    FactoryIDComboBox.Text = "Select Apprise Code";
+                    FactoryIDComboBox.Text = "Select Factory ID";
                     while(myreader.Read())
                     FactoryIDComboBox.Items.Add(myreader.GetString(0));
                 }
@@ -204,41 +200,104 @@ namespace Serial_Number_Generator
 
         private void CreateSerialNumberButton_Click(object sender, EventArgs e)
         {
-            if (GetFormData())
-            {
-                Int64 serialnumber = SerialNumberQuery();
+            //try
+            //{
+            //    if (GetFormData())
+            //    {
+            //        string lastserialnumberquery = "SELECT SerialNumber FROM serialnumbers where ProductCode=" + AdminClass.ProductCode + " Order by serialNumberID desc limit 1;";
+            //        Int64 serialnumberreturned = GetSerialNumberQuery(lastserialnumberquery);
 
-                //Length is 13. Not first time serial number for this product code
-                if (serialnumber.ToString().Length == Constants.SERIALNUMBERLENTH)
-                {
-                    //check the serial as per business reqs before incrementing and inserting into db.
-                           
-                    //parse the returned serial number and get the serial number, month and product code.
+            //        //Length is 13. Not first time serial number for this product code
+            //        if (serialnumberreturned.ToString().Length == Constants.SERIAL_NUMBER_LENTH)
+            //        {
+            //            //check the serial as per business reqs before incrementing and inserting into db.
+            //            //parse the returned serial number and get the serial number, month and product code.
+            //            //string s_fc = (serialnumberreturned.ToString()).Substring(0, 2);
+
+            //            //check the above serial number , so that it should not exist in db and incremenet it and insert it in db
+            //            //if month is different then increment uncless its MAXIMUM_SERIAL_NUMBER_LIMIT then 00001
+
+            //            string last_serial_number_created = (serialnumberreturned.ToString()).Substring(8, 5); 
+            //            string last_serial_number_created_month = (serialnumberreturned.ToString()).Substring(4, 5);
+            //            string last_serial_number_created_year = (serialnumberreturned.ToString()).Substring(2, 2);
+            //            int sn = 0;      
+                                         
+            //            //increment the serial number
+            //            Int32.TryParse(last_serial_number_created, out sn);
+            //            //99999
+            //            if(sn < Constants.MAXIMUM_SERIAL_NUMBER_LIMIT)
+            //            {
+                            
+                            
+                            
+                                                 
+            //                //for every increment check if the limit has been reached.
+
+            //                string count_serialnumbers_in_same_month_year_query = "SELECT count(SerialNumber) as total FROM zeronext.serialnumbers where ProductCode = " + AdminClass.ProductCode + " and year( SerialCreationDate ) = " + DateTime.Today.Year + " and month(SerialCreationDate) = " + DateTime.Today.Month + ";";
+            //                int count_serialnumbers_in_same_month_year = CountSerialNumbersInMonth(count_serialnumbers_in_same_month_year_query);
+
+            //                if (count_serialnumbers_in_same_month_year > 0)
+            //                {
+            //                    if (count_serialnumbers_in_same_month_year <= Constants.MAXIMUM_SERIAL_NUMBER_LIMIT)
+            //                    {
+
+            //                    }
+            //                    else
+            //                    {
+            //                        MessageBox.Show("Maximum Limit (99999) within a month reached.");
+            //                    }
+            //                }
 
 
-                    string fc = (serialnumber.ToString()).Substring(0,2);
-                    string month = (serialnumber.ToString()).Substring(2, 2);
-                    string year = (serialnumber.ToString()).Substring(4, 2);
-                    string pc = (serialnumber.ToString()).Substring(6, 2);
-                    string sn = (serialnumber.ToString()).Substring(8, 5);
 
 
-                    //check tje above serial number , so that it should not exit in db and incremenet it and insert it in db
-                    //if month is different then increment uncless its 99999 then 00001
 
+            //                sn++;
+            //                //insert the new serial number
+            //                FormatSerialNumber(sn);
+            //            }
+            //            else if( sn>= Constants.MAXIMUM_SERIAL_NUMBER_LIMIT )
+            //            {
+            //                //check the last serial month+year and today month+year, if same then get first row of the same month, other wise start from 00001
 
-                }
-                //first time serial number for this product code 
-                else
-                {
-                    //first serial number for this product code
+            //                //same month and year
+            //                if (last_serial_number_created_month == DateTime.Today.Month.ToString("00") && last_serial_number_created_year == DateTime.Today.Year.ToString("yyyy"))
+            //                {
+            //                    //get first row created in that product category in that month.
+            //                    string first_serial_number_query = "SELECT SerialNumber FROM serialnumbers where ProductCode=" + AdminClass.ProductCode + " Order by serialNumberID asc limit 1;";
+            //                    Int64 first_serial_number_returned = GetSerialNumberQuery(first_serial_number_query);
 
-                    //create first time serial number for this categor
+            //                    //string s_year = (first_serial_number_returned.ToString()).Substring(2, 2);
+            //                    //string s_month = (first_serial_number_returned.ToString()).Substring(4, 2);
+            //                    //string s_pc = (first_serial_number_returned.ToString()).Substring(6, 2);
+            //                    string first_serial_number_created = (first_serial_number_returned.ToString()).Substring(8, 5);
 
-                }
-                //pass product code , month , year, factory code and serial number
-                //InsertSerialNumberToDb(AdminClass.FactoryAppriseCode, DateTime.Today.Month, DateTime.Today.Year, serialnumber);
-            }
+                                
+
+            //                    //increment till first serial number, if greater then show an error message you reached a limit
+
+            //                    //show an error message to check if 99999 serial numbers are generated this month
+            //                }
+            //                //different month, start from 00001
+            //                else
+            //                {
+            //                    //then start from beginnning
+            //                }
+            //            }
+            //        }
+            //        //first time serial number for this product code 
+            //        else
+            //        {
+            //            //first serial number for this product code
+            //            //create first time serial number for this category
+            //            FormatSerialNumber(1);
+            //        }
+                    
+            //    }
+            //}catch(Exception ex)
+            //{
+            //    MessageBox.Show("Error in creating serial number.");
+            //}
         }
 
 
@@ -253,7 +312,7 @@ namespace Serial_Number_Generator
                 else
                 {
                     FactoryIDErrorLabel.Text = "";
-                    AdminClass.FactoryAppriseCode = FactoryIDComboBox.SelectedItem.ToString();
+                    Int32.TryParse(FactoryIDComboBox.SelectedItem.ToString(), out AdminClass.FactoryID);
                 }
 
                 if (ProductIDComboBox.SelectedIndex == -1)
@@ -276,11 +335,16 @@ namespace Serial_Number_Generator
             return true;
         }
 
-        private static Int64 SerialNumberQuery()
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private static Int64 GetSerialNumberQuery(string query)
         {
             //get last serial number created in a product category
 
-            Int64 lastserialnumberofproductcategory = 0;
+            Int64 serial_number_of_productcategory = 0;
 
             //get last serial number of each product category
             MySqlConnection connection = null;
@@ -290,14 +354,14 @@ namespace Serial_Number_Generator
                 connection = new MySqlConnection("Server=localhost;Database=zeronext;UID=root;Password=admin");
                 connection.Open();
 
-                MySqlCommand command = new MySqlCommand("SELECT SerialNumber FROM serialnumbers where ProductCode=" + AdminClass.ProductCode + " Order by serialNumberID desc limit 1;", connection);
+                MySqlCommand command = new MySqlCommand(query, connection);
 
                 myreader = command.ExecuteReader();
                 if (myreader.HasRows)
                 {
                     while (myreader.Read())
                     {
-                        lastserialnumberofproductcategory = myreader.GetInt64(0);
+                        serial_number_of_productcategory = myreader.GetInt64(0);
                     }
                 }
                 else
@@ -316,12 +380,42 @@ namespace Serial_Number_Generator
                 if (connection != null)
                     connection.Close();
             }
-            return lastserialnumberofproductcategory;
+            return serial_number_of_productcategory;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sn"></param>
+        private void FormatSerialNumber( int sn)
+        {
+            string serial_number = "";
+            Int64 snumber = 0;
 
-        //make it static
-        private bool InsertSerialNumberToDb( string fc, int month , int year, int serialnumber)
+            serial_number += AdminClass.FactoryID;
+
+            int year = DateTime.Today.Year % 100;
+            serial_number += year.ToString();
+
+            string smonth = DateTime.Today.Month.ToString("00");
+            serial_number += smonth.ToString();
+
+            serial_number += AdminClass.ProductCode;
+
+            string ssn = sn.ToString("00000");
+            serial_number += ssn;
+
+
+            Int64.TryParse(serial_number, out snumber);
+
+            SerialNumberCreatedLabel.Text = snumber.ToString();
+
+            //pass product code , month , year, factory code and serial number
+            string query = "INSERT INTO serialnumbers (serialnumbers.SerialNumber,serialnumbers.ProductCode,serialnumbers.FactoryID,serialnumbers.SerialCreationDate, CreatedBy) values(" + (snumber) + ", " + AdminClass.ProductCode + "," + AdminClass.FactoryID + ",'" + DateTime.Today.ToString("yyyy-MM-dd") + "'," + AdminClass.CurrentUserid + "); ";
+            InsertSerialNumber(query);
+        }
+
+        private bool InsertSerialNumber(string query)
         {
             MySqlConnection connection = null;
             try
@@ -329,7 +423,7 @@ namespace Serial_Number_Generator
                 connection = new MySqlConnection("Server=localhost;Database=zeronext;UID=root;Password=admin");
                 connection.Open();
 
-                MySqlCommand command = new MySqlCommand("INSERT INTO serialnumbers (serialnumbers.SerialNumber,serialnumbers.ProductCode,serialnumbers.FactoryID,serialnumbers.SerialCreationDate, CreatedBy) values(" + (serialnumber++) + ", " + AdminClass.ProductCode + ", 43, '2017/02/08'," + AdminClass.CurrentUserid + "); ", connection);
+                MySqlCommand command = new MySqlCommand(query, connection);
                 int a = command.ExecuteNonQuery();
             }
             catch (MySqlException ex)
@@ -337,7 +431,6 @@ namespace Serial_Number_Generator
                 //-//Log exception 
                 MessageBox.Show(ex.Message.ToString());
                 return false;
-             
             }
             finally
             {
@@ -346,6 +439,173 @@ namespace Serial_Number_Generator
             }
             return true;
         }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        private int CountSerialNumbersInMonth(string query)
+        {
+            MySqlConnection connection = null;
+            int number_of_rows = 0;
+            try
+            {
+                connection = new MySqlConnection("Server=localhost;Database=zeronext;UID=root;Password=admin");
+                connection.Open();
+
+                MySqlCommand command = new MySqlCommand(query, connection);
+
+                object result = null;
+                result = command.ExecuteScalar();
+                if (result != null)
+                {
+                    number_of_rows = Convert.ToInt32(result);
+                    MessageBox.Show(number_of_rows.ToString());
+                }
+                else
+                {
+                    MessageBox.Show("No Data for this producrt category");
+                }
+            }
+            catch (MySqlException ex)
+            {
+                //-//Log exception 
+                MessageBox.Show(ex.Message.ToString());
+                return 0;
+            }
+            finally
+            {
+                if (connection != null)
+                    connection.Close();
+            }
+            return number_of_rows;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void Create_Click(object sender, EventArgs e)
+        {
+            int last_serial_number = 0;
+            string last_serial_number_created_factory_id = string.Empty;
+            string last_serial_number_created_year = string.Empty;
+            string last_serial_number_created_month = string.Empty;
+            string last_serial_number_created = string.Empty;
+
+
+            Int64 new_serial_number = 0;
+            string create_new_serial_number = string.Empty;
+            try
+            {
+                if (GetFormData())
+                {
+                    string lastserialnumberquery = "SELECT SerialNumber FROM serialnumbers where ProductCode=" + AdminClass.ProductCode + " Order by serialNumberID desc limit 1;";
+                    Int64 serialnumberreturned = GetSerialNumberQuery(lastserialnumberquery);
+
+                    //Length is 13. Not first time serial number for this product code
+                    if (serialnumberreturned.ToString().Length == Constants.SERIAL_NUMBER_LENTH)
+                    {
+                        //last_serial_number_created_factory_id = (serialnumberreturned.ToString()).Substring(0, 2);
+                        //last_serial_number_created_year = (serialnumberreturned.ToString()).Substring(2, 2);
+                        //last_serial_number_created_month = (serialnumberreturned.ToString()).Substring(4, 2);
+                        last_serial_number_created = (serialnumberreturned.ToString()).Substring(8, 5);                        
+                        Int32.TryParse(last_serial_number_created, out last_serial_number);
+
+                        //increment the serial number
+                        if(last_serial_number<Constants.MAXIMUM_SERIAL_NUMBER_LIMIT)
+                        {
+                            //then increment
+                            serialnumberreturned++;
+                            if(CheckNewSerialNumber(serialnumberreturned)==0)
+                            {
+                                FormatSerialNumber(last_serial_number+1);
+                            }
+                            else
+                            {
+                                MessageBox.Show("Serial Number already exists");
+                            }
+                        }
+                        else if(last_serial_number >= Constants.MAXIMUM_SERIAL_NUMBER_LIMIT)
+                        {
+                            //start from 0 for this month.
+                            create_new_serial_number += AdminClass.FactoryID;
+                            create_new_serial_number += DateTime.Today.Year % 100;
+                            create_new_serial_number += DateTime.Today.Month.ToString("00");
+                            create_new_serial_number += AdminClass.ProductCode;
+                            create_new_serial_number += 1.ToString("00000");
+                            Int64.TryParse(create_new_serial_number, out new_serial_number);
+                            if (CheckNewSerialNumber(new_serial_number)==0)
+                            {
+                                FormatSerialNumber(1);
+                            }
+                        }                                               
+                    }
+                    else
+                    {
+                        //first serial number for this product code
+                        //create first time serial number for this category
+                        FormatSerialNumber(1);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error in creating serial number.");
+            }
+        }
+
+
+        private static int CheckNewSerialNumber(Int64 serialnumber)
+        {
+            MySqlConnection connection = null;
+            try
+            {
+                connection = new MySqlConnection("Server=localhost;Database=zeronext;UID=root;Password=admin");
+                connection.Open();
+
+                MySqlCommand command = new MySqlCommand("SELECT count(SerialNumber) as totalrows FROM zeronext.serialnumbers where SerialNumber = " + serialnumber + ";", connection);
+
+                object result = null;
+                result = command.ExecuteScalar();
+                if (result != null)
+                {
+                    return Convert.ToInt32( result);
+                }
+            }
+            catch (MySqlException ex)
+            {
+                //-//Log exception 
+                MessageBox.Show(ex.Message.ToString());
+                return -1;
+            }
+            finally
+            {
+                if (connection != null)
+                    connection.Close();
+            }
+            return 0;
+        }
+
+
+        void run99999serials()
+        {
+            int i = 0;
+            while(i<1000000)
+            {
+                Create.PerformClick();
+                i++;
+            }
+        }
+
+        private void PrintLabelBtn_Click(object sender, EventArgs e)
+        {
+            run99999serials();
+        }
     }
 
     public static class AdminClass
@@ -353,6 +613,6 @@ namespace Serial_Number_Generator
         public static Form RefToLoginForm = null;
         public static Int32 CurrentUserid = 0;
         public static Int32 ProductCode = 0;
-        public static string FactoryAppriseCode = string.Empty;
+        public static Int32 FactoryID = 0;
     }
 }

@@ -8,6 +8,7 @@ namespace Serial_Number_Generator
 {
     static class Constants
     {
-        public const int SERIALNUMBERLENTH = 13; 
+        public const int SERIAL_NUMBER_LENTH = 13;
+        public const int MAXIMUM_SERIAL_NUMBER_LIMIT = 99999;
     }
 }
