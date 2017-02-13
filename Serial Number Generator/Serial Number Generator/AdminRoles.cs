@@ -13,6 +13,17 @@
          - Check for custom exceptions
          - check for all values ( class members )  their values before using it. like if it null/0/empty
          - check if serial numbers table is empty or not, to insert first row
+         - Get todays' date + product code + month + year + factory code + serial number
+
+
+
+
+TOMMORROW         - RUN THE QUERY FOR EMPTY PRODCUT CODE WHICH HAS NONE ROWS
+                        - this will be first time serial number generation
+                        - create it by getting month + 
+
+
+
  */
 
 using System;
@@ -201,20 +212,32 @@ namespace Serial_Number_Generator
                 if (serialnumber.ToString().Length == Constants.SERIALNUMBERLENTH)
                 {
                     //check the serial as per business reqs before incrementing and inserting into db.
-                              
-                                
+                           
+                    //parse the returned serial number and get the serial number, month and product code.
+
+
+                    string fc = (serialnumber.ToString()).Substring(0,2);
+                    string month = (serialnumber.ToString()).Substring(2, 2);
+                    string year = (serialnumber.ToString()).Substring(4, 2);
+                    string pc = (serialnumber.ToString()).Substring(6, 2);
+                    string sn = (serialnumber.ToString()).Substring(8, 5);
+
+
+                    //check tje above serial number , so that it should not exit in db and incremenet it and insert it in db
+                    //if month is different then increment uncless its 99999 then 00001
+
+
                 }
                 //first time serial number for this product code 
                 else
                 {
                     //first serial number for this product code
-                    //create first time serial number for this category
-                    
-                    
+
+                    //create first time serial number for this categor
 
                 }
-
-                InsertSerialNumberToDb(serialnumber);
+                //pass product code , month , year, factory code and serial number
+                //InsertSerialNumberToDb(AdminClass.FactoryAppriseCode, DateTime.Today.Month, DateTime.Today.Year, serialnumber);
             }
         }
 
@@ -298,7 +321,7 @@ namespace Serial_Number_Generator
 
 
         //make it static
-        private bool InsertSerialNumberToDb(Int64 serialnumber)
+        private bool InsertSerialNumberToDb( string fc, int month , int year, int serialnumber)
         {
             MySqlConnection connection = null;
             try
