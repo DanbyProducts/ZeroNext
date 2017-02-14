@@ -15,10 +15,12 @@
          - check if serial numbers table is empty or not, to insert first row
          - Get todays' date + product code + month + year + factory code + serial number
          - Check all the variables and their daa type and match with the database schema
-         - Check for all message boxes.
+         - Check for all message boxes and write to logs.
 
 
 TESTING  - if max serial numbers are created this month or not.
+        
+TOMORROW - if serial already exist     
 
  */
 
@@ -461,12 +463,11 @@ namespace Serial_Number_Generator
                 result = command.ExecuteScalar();
                 if (result != null)
                 {
-                    number_of_rows = Convert.ToInt32(result);
-                    MessageBox.Show(number_of_rows.ToString());
+                    number_of_rows = Convert.ToInt32(result);                   
                 }
                 else
                 {
-                    MessageBox.Show("No Data for this producrt category");
+                    MessageBox.Show("Cannot count the number of serial numbers.");
                 }
             }
             catch (MySqlException ex)
@@ -519,14 +520,27 @@ namespace Serial_Number_Generator
                         if(last_serial_number<Constants.MAXIMUM_SERIAL_NUMBER_LIMIT)
                         {
                             //then increment
-                            serialnumberreturned++;
-                            if(CheckNewSerialNumber(serialnumberreturned)==0)
+                            //serialnumberreturned++;
+                            create_new_serial_number += AdminClass.FactoryID;
+                            create_new_serial_number += DateTime.Today.Year % 100;
+                            create_new_serial_number += DateTime.Today.Month.ToString("00");
+                            create_new_serial_number += AdminClass.ProductCode;
+                            create_new_serial_number += (last_serial_number + 1).ToString("00000");
+                            Int64.TryParse(create_new_serial_number, out new_serial_number);
+                            if (CheckNewSerialNumber(new_serial_number) ==0)
                             {
                                 FormatSerialNumber(last_serial_number+1);
                             }
                             else
                             {
                                 MessageBox.Show("Serial Number already exists");
+                                //Check if max limit has been reached for a product category in a month
+                                string count_serialnumbers_in_same_month_year_factoryID_query = "SELECT count(SerialNumber) as total FROM zeronext.serialnumbers where ProductCode = " + AdminClass.ProductCode + " and FactoryID= "  + AdminClass.FactoryID + " and year( SerialCreationDate ) = " + DateTime.Today.Year + " and month(SerialCreationDate) = " + DateTime.Today.Month + ";";
+                                int count_serialnumbers_in_same_month_year_factoryID = CountSerialNumbersInMonth(count_serialnumbers_in_same_month_year_factoryID_query);
+                                if(count_serialnumbers_in_same_month_year_factoryID>=Constants.MAXIMUM_SERIAL_NUMBER_LIMIT)
+                                {
+                                    MessageBox.Show("99,999 Serial Numbers have already been created for product category : " + AdminClass.ProductCode + " at FactoryID : " + AdminClass.FactoryID + " in " + DateTime.Today.ToString("yyyy-MM") +"(yyyy-mm)." );
+                                }
                             }
                         }
                         else if(last_serial_number >= Constants.MAXIMUM_SERIAL_NUMBER_LIMIT)
@@ -541,6 +555,10 @@ namespace Serial_Number_Generator
                             if (CheckNewSerialNumber(new_serial_number)==0)
                             {
                                 FormatSerialNumber(1);
+                            }
+                            else
+                            {
+                                MessageBox.Show("Serial Number already exists");
                             }
                         }                                               
                     }
