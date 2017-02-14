@@ -16,12 +16,16 @@
          - Get todays' date + product code + month + year + factory code + serial number
          - Check all the variables and their daa type and match with the database schema
          - Check for all message boxes and write to logs.
+         - Dont let user to change product code and factory code after inserting the serial number in db, because after inserting they can change the FC AND PC and label print button will pick those values.
+TOMORROW - Printer and create serial number button functionality.
+
+Log files
 
 
-TESTING  - if max serial numbers are created this month or not.
-        
-TOMORROW - if serial already exist     
+Label printing , Default printer setup
 
+
+FEATURES : SEARCH LAST SERIAL NUMBER CREATED FOR PC AND FC, IF USER FORGOT TO PRINT A SERIAL NUMBER AND ACCIDENTLY PRESSED CREATE SERIAL NUMBER BUTTON.
  */
 
 using System;
@@ -414,7 +418,12 @@ namespace Serial_Number_Generator
 
             //pass product code , month , year, factory code and serial number
             string query = "INSERT INTO serialnumbers (serialnumbers.SerialNumber,serialnumbers.ProductCode,serialnumbers.FactoryID,serialnumbers.SerialCreationDate, CreatedBy) values(" + (snumber) + ", " + AdminClass.ProductCode + "," + AdminClass.FactoryID + ",'" + DateTime.Today.ToString("yyyy-MM-dd") + "'," + AdminClass.CurrentUserid + "); ";
-            InsertSerialNumber(query);
+            if( InsertSerialNumber(query) )
+            {
+                //show print label button to print label
+                PrintLabelBtn.Visible = true;
+
+            }
         }
 
         private bool InsertSerialNumber(string query)
@@ -497,83 +506,88 @@ namespace Serial_Number_Generator
             string last_serial_number_created_month = string.Empty;
             string last_serial_number_created = string.Empty;
 
-
-            Int64 new_serial_number = 0;
-            string create_new_serial_number = string.Empty;
-            try
+            if (AdminClass.PrinterUsing != null)
             {
-                if (GetFormData())
+                Int64 new_serial_number = 0;
+                string create_new_serial_number = string.Empty;
+                try
                 {
-                    string lastserialnumberquery = "SELECT SerialNumber FROM serialnumbers where ProductCode=" + AdminClass.ProductCode + " Order by serialNumberID desc limit 1;";
-                    Int64 serialnumberreturned = GetSerialNumberQuery(lastserialnumberquery);
-
-                    //Length is 13. Not first time serial number for this product code
-                    if (serialnumberreturned.ToString().Length == Constants.SERIAL_NUMBER_LENTH)
+                    if (GetFormData())
                     {
-                        //last_serial_number_created_factory_id = (serialnumberreturned.ToString()).Substring(0, 2);
-                        //last_serial_number_created_year = (serialnumberreturned.ToString()).Substring(2, 2);
-                        //last_serial_number_created_month = (serialnumberreturned.ToString()).Substring(4, 2);
-                        last_serial_number_created = (serialnumberreturned.ToString()).Substring(8, 5);                        
-                        Int32.TryParse(last_serial_number_created, out last_serial_number);
+                        string lastserialnumberquery = "SELECT SerialNumber FROM serialnumbers where ProductCode=" + AdminClass.ProductCode + " Order by serialNumberID desc limit 1;";
+                        Int64 serialnumberreturned = GetSerialNumberQuery(lastserialnumberquery);
 
-                        //increment the serial number
-                        if(last_serial_number<Constants.MAXIMUM_SERIAL_NUMBER_LIMIT)
+                        //Length is 13. Not first time serial number for this product code
+                        if (serialnumberreturned.ToString().Length == Constants.SERIAL_NUMBER_LENTH)
                         {
-                            //then increment
-                            //serialnumberreturned++;
-                            create_new_serial_number += AdminClass.FactoryID;
-                            create_new_serial_number += DateTime.Today.Year % 100;
-                            create_new_serial_number += DateTime.Today.Month.ToString("00");
-                            create_new_serial_number += AdminClass.ProductCode;
-                            create_new_serial_number += (last_serial_number + 1).ToString("00000");
-                            Int64.TryParse(create_new_serial_number, out new_serial_number);
-                            if (CheckNewSerialNumber(new_serial_number) ==0)
+                            //last_serial_number_created_factory_id = (serialnumberreturned.ToString()).Substring(0, 2);
+                            //last_serial_number_created_year = (serialnumberreturned.ToString()).Substring(2, 2);
+                            //last_serial_number_created_month = (serialnumberreturned.ToString()).Substring(4, 2);
+                            last_serial_number_created = (serialnumberreturned.ToString()).Substring(8, 5);
+                            Int32.TryParse(last_serial_number_created, out last_serial_number);
+
+                            //increment the serial number
+                            if (last_serial_number < Constants.MAXIMUM_SERIAL_NUMBER_LIMIT)
                             {
-                                FormatSerialNumber(last_serial_number+1);
-                            }
-                            else
-                            {
-                                MessageBox.Show("Serial Number already exists");
-                                //Check if max limit has been reached for a product category in a month
-                                string count_serialnumbers_in_same_month_year_factoryID_query = "SELECT count(SerialNumber) as total FROM zeronext.serialnumbers where ProductCode = " + AdminClass.ProductCode + " and FactoryID= "  + AdminClass.FactoryID + " and year( SerialCreationDate ) = " + DateTime.Today.Year + " and month(SerialCreationDate) = " + DateTime.Today.Month + ";";
-                                int count_serialnumbers_in_same_month_year_factoryID = CountSerialNumbersInMonth(count_serialnumbers_in_same_month_year_factoryID_query);
-                                if(count_serialnumbers_in_same_month_year_factoryID>=Constants.MAXIMUM_SERIAL_NUMBER_LIMIT)
+                                //then increment
+                                //serialnumberreturned++;
+                                create_new_serial_number += AdminClass.FactoryID;
+                                create_new_serial_number += DateTime.Today.Year % 100;
+                                create_new_serial_number += DateTime.Today.Month.ToString("00");
+                                create_new_serial_number += AdminClass.ProductCode;
+                                create_new_serial_number += (last_serial_number + 1).ToString("00000");
+                                Int64.TryParse(create_new_serial_number, out new_serial_number);
+                                if (CheckNewSerialNumber(new_serial_number) == 0)
                                 {
-                                    MessageBox.Show("99,999 Serial Numbers have already been created for product category : " + AdminClass.ProductCode + " at FactoryID : " + AdminClass.FactoryID + " in " + DateTime.Today.ToString("yyyy-MM") +"(yyyy-mm)." );
+                                    FormatSerialNumber(last_serial_number + 1);
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Serial Number already exists");
+                                    //Check if max limit has been reached for a product category in a month
+                                    string count_serialnumbers_in_same_month_year_factoryID_query = "SELECT count(SerialNumber) as total FROM zeronext.serialnumbers where ProductCode = " + AdminClass.ProductCode + " and FactoryID= " + AdminClass.FactoryID + " and year( SerialCreationDate ) = " + DateTime.Today.Year + " and month(SerialCreationDate) = " + DateTime.Today.Month + ";";
+                                    int count_serialnumbers_in_same_month_year_factoryID = CountSerialNumbersInMonth(count_serialnumbers_in_same_month_year_factoryID_query);
+                                    if (count_serialnumbers_in_same_month_year_factoryID >= Constants.MAXIMUM_SERIAL_NUMBER_LIMIT)
+                                    {
+                                        MessageBox.Show("99,999 Serial Numbers have already been created for product category : " + AdminClass.ProductCode + " at FactoryID : " + AdminClass.FactoryID + " in " + DateTime.Today.ToString("yyyy-MM") + "(yyyy-mm).");
+                                    }
+                                }
+                            }
+                            else if (last_serial_number >= Constants.MAXIMUM_SERIAL_NUMBER_LIMIT)
+                            {
+                                //start from 0 for this month.
+                                create_new_serial_number += AdminClass.FactoryID;
+                                create_new_serial_number += DateTime.Today.Year % 100;
+                                create_new_serial_number += DateTime.Today.Month.ToString("00");
+                                create_new_serial_number += AdminClass.ProductCode;
+                                create_new_serial_number += 1.ToString("00000");
+                                Int64.TryParse(create_new_serial_number, out new_serial_number);
+                                if (CheckNewSerialNumber(new_serial_number) == 0)
+                                {
+                                    FormatSerialNumber(1);
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Serial Number already exists");
                                 }
                             }
                         }
-                        else if(last_serial_number >= Constants.MAXIMUM_SERIAL_NUMBER_LIMIT)
+                        else
                         {
-                            //start from 0 for this month.
-                            create_new_serial_number += AdminClass.FactoryID;
-                            create_new_serial_number += DateTime.Today.Year % 100;
-                            create_new_serial_number += DateTime.Today.Month.ToString("00");
-                            create_new_serial_number += AdminClass.ProductCode;
-                            create_new_serial_number += 1.ToString("00000");
-                            Int64.TryParse(create_new_serial_number, out new_serial_number);
-                            if (CheckNewSerialNumber(new_serial_number)==0)
-                            {
-                                FormatSerialNumber(1);
-                            }
-                            else
-                            {
-                                MessageBox.Show("Serial Number already exists");
-                            }
-                        }                                               
-                    }
-                    else
-                    {
-                        //first serial number for this product code
-                        //create first time serial number for this category
-                        FormatSerialNumber(1);
-                    }
+                            //first serial number for this product code
+                            //create first time serial number for this category
+                            FormatSerialNumber(1);
+                        }
 
+                    }
                 }
-            }
-            catch (Exception ex)
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error in creating serial number.");
+                }
+            }else
             {
-                MessageBox.Show("Error in creating serial number.");
+                MessageBox.Show("Select DYMO Printer First");
             }
         }
 
@@ -609,20 +623,57 @@ namespace Serial_Number_Generator
             return 0;
         }
 
-
-        void run99999serials()
-        {
-            int i = 0;
-            while(i<1000000)
-            {
-                Create.PerformClick();
-                i++;
-            }
-        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        //void run99999serials()
+        //{
+        //    int i = 0;
+        //    while(i<1000000)
+        //    {
+        //        Create.PerformClick();
+        //        i++;
+        //    }
+        //}
 
         private void PrintLabelBtn_Click(object sender, EventArgs e)
         {
-            run99999serials();
+            //CreateSNBtn.Visible = false;
+            var label = DYMO.Label.Framework.Label.Open(@"..//..//ZeroNext (GregHall) - LW_DURABLE_25X89mm-Built Code  00.label");
+            label.SetObjectText("TEXT", "Model : SR002");
+            label.SetObjectText("BARCODE", "SR001");
+            label.SetObjectText("TEXT_1", "1234567891234");
+            label.SetObjectText("BARCODE_1", "1234567891234");
+            label.SetObjectText("TEXT_2", "Built Code : 01");
+            label.Print("DYMO LabelWriter 450 Turbo");
+        }
+
+        private void selectPrinterToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                PrintDialog printDialog = new PrintDialog();
+                DialogResult result = printDialog.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    AdminClass.PrinterUsing = printDialog.PrinterSettings.PrinterName.Split('\\');
+                    if(AdminClass.PrinterUsing != null && AdminClass.PrinterUsing[AdminClass.PrinterUsing.Length - 1] != "DYMO LabelWriter 450 Turbo")
+                    {
+                        AdminClass.PrinterUsing = null;
+                        MessageBox.Show("This application is only compatible with DYMO LabelWriter 450 Turbo.");
+                    }
+                    else
+                    {
+                        PrinterLabel.Text = "Printer Selected : " + AdminClass.PrinterUsing[AdminClass.PrinterUsing.Length - 1];                           
+                    }
+                }               
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());               
+            }           
         }
     }
 
@@ -632,5 +683,6 @@ namespace Serial_Number_Generator
         public static Int32 CurrentUserid = 0;
         public static Int32 ProductCode = 0;
         public static Int32 FactoryID = 0;
+        public static string[] PrinterUsing = null;
     }
 }
