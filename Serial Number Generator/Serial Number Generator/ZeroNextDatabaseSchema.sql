@@ -17,6 +17,7 @@ CREATE TABLE SerialNumbers (
 serialNumberID int8 not null auto_increment,
 SerialNumber int8 not null unique,
 ProductCode int4 not null,
+ModelNumber varchar(25) not null,
 FactoryID int3 not null,
 SerialCreationDate date,
 CreatedBy int8 not null,
@@ -34,7 +35,15 @@ Location varchar(50),
 FactoryID int4 not null
 );
 
+use zeronext;
 
+INSERT into serialnumbers (serialnumbers.serialNumberID, serialnumbers.SerialNumber, serialnumbers.ProductCode, serialnumbers.ModelNumber,serialnumbers.FactoryID,serialnumbers.SerialCreationDate, serialnumbers.CreatedBy) values
+(1,7117033900001,39,'SR001',71,'2017-03-14', 1);
+
+use zeronext;
+
+INSERT into serialnumbers (serialnumbers.serialNumberID, serialnumbers.SerialNumber, serialnumbers.ProductCode, serialnumbers.ModelNumber,serialnumbers.FactoryID,serialnumbers.SerialCreationDate, serialnumbers.CreatedBy) values
+(2,7117033900002,39,'SR001',71,'2017-03-14', 1);
 
 use zeronext;
 
@@ -103,4 +112,6 @@ INSERT INTO productcodes() values
 ('55','Small Appliances' ),
 ('56','Pedestal' ),
 ('57','Safe' );
+
+
 
