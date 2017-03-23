@@ -30,8 +30,6 @@
         {
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.logOutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.selectPrinterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.PrintLabelBtn = new System.Windows.Forms.Button();
             this.FactoryIDComboBox = new System.Windows.Forms.ComboBox();
             this.ProductIDComboBox = new System.Windows.Forms.ComboBox();
             this.FactoryIDLabel = new System.Windows.Forms.Label();
@@ -42,7 +40,6 @@
             this.PrinterLabel = new System.Windows.Forms.Label();
             this.ModelNumberLabel = new System.Windows.Forms.Label();
             this.ModelNumberErrorLabel = new System.Windows.Forms.Label();
-            this.ZebraLabelPrintBtn = new System.Windows.Forms.Button();
             this.ModelNumberCb = new System.Windows.Forms.ComboBox();
             this.NumberOfSNLabel = new System.Windows.Forms.Label();
             this.NumberOfSNTb = new System.Windows.Forms.TextBox();
@@ -54,11 +51,10 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.logOutToolStripMenuItem,
-            this.selectPrinterToolStripMenuItem});
+            this.logOutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(393, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(361, 24);
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -68,24 +64,6 @@
             this.logOutToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
             this.logOutToolStripMenuItem.Text = "LogOut";
             this.logOutToolStripMenuItem.Click += new System.EventHandler(this.logOutToolStripMenuItem_Click);
-            // 
-            // selectPrinterToolStripMenuItem
-            // 
-            this.selectPrinterToolStripMenuItem.Name = "selectPrinterToolStripMenuItem";
-            this.selectPrinterToolStripMenuItem.Size = new System.Drawing.Size(88, 20);
-            this.selectPrinterToolStripMenuItem.Text = "Select Printer";
-            this.selectPrinterToolStripMenuItem.Click += new System.EventHandler(this.selectPrinterToolStripMenuItem_Click);
-            // 
-            // PrintLabelBtn
-            // 
-            this.PrintLabelBtn.Location = new System.Drawing.Point(15, 295);
-            this.PrintLabelBtn.Name = "PrintLabelBtn";
-            this.PrintLabelBtn.Size = new System.Drawing.Size(122, 23);
-            this.PrintLabelBtn.TabIndex = 3;
-            this.PrintLabelBtn.Text = "Print Label - DYMO";
-            this.PrintLabelBtn.UseVisualStyleBackColor = true;
-            this.PrintLabelBtn.Visible = false;
-            this.PrintLabelBtn.Click += new System.EventHandler(this.PrintLabelBtn_Click);
             // 
             // FactoryIDComboBox
             // 
@@ -180,16 +158,6 @@
             this.ModelNumberErrorLabel.Size = new System.Drawing.Size(0, 18);
             this.ModelNumberErrorLabel.TabIndex = 15;
             // 
-            // ZebraLabelPrintBtn
-            // 
-            this.ZebraLabelPrintBtn.Location = new System.Drawing.Point(170, 295);
-            this.ZebraLabelPrintBtn.Name = "ZebraLabelPrintBtn";
-            this.ZebraLabelPrintBtn.Size = new System.Drawing.Size(122, 23);
-            this.ZebraLabelPrintBtn.TabIndex = 16;
-            this.ZebraLabelPrintBtn.Text = "Print Label - Zebra";
-            this.ZebraLabelPrintBtn.UseVisualStyleBackColor = true;
-            this.ZebraLabelPrintBtn.Click += new System.EventHandler(this.ZebraLabelPrintBtn_Click);
-            // 
             // ModelNumberCb
             // 
             this.ModelNumberCb.FormattingEnabled = true;
@@ -231,12 +199,11 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(393, 330);
+            this.ClientSize = new System.Drawing.Size(361, 265);
             this.Controls.Add(this.NumberOfSNErrorLabel);
             this.Controls.Add(this.NumberOfSNTb);
             this.Controls.Add(this.NumberOfSNLabel);
             this.Controls.Add(this.ModelNumberCb);
-            this.Controls.Add(this.ZebraLabelPrintBtn);
             this.Controls.Add(this.ModelNumberErrorLabel);
             this.Controls.Add(this.ModelNumberLabel);
             this.Controls.Add(this.PrinterLabel);
@@ -247,7 +214,6 @@
             this.Controls.Add(this.FactoryIDLabel);
             this.Controls.Add(this.ProductIDComboBox);
             this.Controls.Add(this.FactoryIDComboBox);
-            this.Controls.Add(this.PrintLabelBtn);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "AdminRoles";
@@ -263,7 +229,6 @@
         #endregion
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem logOutToolStripMenuItem;
-        private System.Windows.Forms.Button PrintLabelBtn;
         private System.Windows.Forms.ComboBox FactoryIDComboBox;
         private System.Windows.Forms.ComboBox ProductIDComboBox;
         private System.Windows.Forms.Label FactoryIDLabel;
@@ -271,11 +236,9 @@
         private System.Windows.Forms.Label FactoryIDErrorLabel;
         private System.Windows.Forms.Label ProductIDErrorLabel;
         private System.Windows.Forms.Button CreateSNBtn;
-        private System.Windows.Forms.ToolStripMenuItem selectPrinterToolStripMenuItem;
         private System.Windows.Forms.Label PrinterLabel;
         private System.Windows.Forms.Label ModelNumberLabel;
         private System.Windows.Forms.Label ModelNumberErrorLabel;
-        private System.Windows.Forms.Button ZebraLabelPrintBtn;
         private System.Windows.Forms.ComboBox ModelNumberCb;
         private System.Windows.Forms.Label NumberOfSNLabel;
         private System.Windows.Forms.TextBox NumberOfSNTb;

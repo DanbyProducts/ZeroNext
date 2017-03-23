@@ -467,7 +467,7 @@ namespace Serial_Number_Generator
             //SerialNumberCreatedLabel.Text = snumber.ToString();
 
             //pass product code , month , year, factory code and serial number
-            string query = "INSERT INTO serialnumbers (serialnumbers.SerialNumber,serialnumbers.ProductCode,serialnumbers.ModelNumber, serialnumbers.FactoryID,serialnumbers.SerialCreationDate, CreatedBy) values(" + (snumber) + ", " + AdminClass.ProductCode + ",'" + AdminClass.ModelNumber + "'," + AdminClass.FactoryID + ",'" + DateTime.Today.ToString("yyyy-MM-dd") + "'," + AdminClass.CurrentUserid + "); ";
+            string query = "INSERT INTO serialnumbers (serialnumbers.SerialNumber,serialnumbers.ProductCode, serialnumbers.FactoryID,serialnumbers.SerialCreationDate, CreatedBy) values(" + (snumber) + ", " + AdminClass.ProductCode + "," + AdminClass.FactoryID + ",'" + DateTime.Today.ToString("yyyy-MM-dd") + "'," + AdminClass.CurrentUserid + "); ";
             if (InsertSerialNumber(query))
             {
                 //show print label button to print label
@@ -548,7 +548,148 @@ namespace Serial_Number_Generator
 
 
 
-        private bool StartSerialNumberCreation()
+        //private bool StartSerialNumberCreation()
+        //{
+        //    int last_serial_number = 0;
+        //    string last_serial_number_created_factory_id = string.Empty;
+        //    string last_serial_number_created_year = string.Empty;
+        //    string last_serial_number_created_month = string.Empty;
+        //    string last_serial_number_created = string.Empty;
+
+        //    if (AdminClass.PrinterUsing != null)
+        //    {
+        //        Int64 new_serial_number = 0;
+        //        string create_new_serial_number = string.Empty;
+        //        try
+        //        {
+        //            //if (GetFormData())
+        //            //{
+        //                string lastserialnumberquery = "SELECT SerialNumber FROM serialnumbers where ProductCode='" + AdminClass.ProductCode + "' Order by serialNumberID desc limit 1;";
+        //                Int64 serialnumberreturned = GetSerialNumberQuery(lastserialnumberquery);
+
+        //                //Length is 13. Not first time serial number for this product code
+        //                if (serialnumberreturned.ToString().Length == Constants.SERIAL_NUMBER_LENTH)
+        //                {
+        //                    //last_serial_number_created_factory_id = (serialnumberreturned.ToString()).Substring(0, 2);
+        //                    //last_serial_number_created_year = (serialnumberreturned.ToString()).Substring(2, 2);
+        //                    //last_serial_number_created_month = (serialnumberreturned.ToString()).Substring(4, 2);
+        //                    last_serial_number_created = (serialnumberreturned.ToString()).Substring(8, 5);
+        //                    Int32.TryParse(last_serial_number_created, out last_serial_number);
+
+        //                    //increment the serial number
+        //                    if (last_serial_number < Constants.MAXIMUM_SERIAL_NUMBER_LIMIT)
+        //                    {
+        //                        //then increment
+        //                        //serialnumberreturned++;
+        //                        create_new_serial_number += AdminClass.FactoryID;
+        //                        create_new_serial_number += DateTime.Today.Year % 100;
+        //                        create_new_serial_number += DateTime.Today.Month.ToString("00");
+        //                        create_new_serial_number += AdminClass.ProductCode;
+        //                        create_new_serial_number += (last_serial_number + 1).ToString("00000");
+        //                        Int64.TryParse(create_new_serial_number, out new_serial_number);
+        //                        if (CheckNewSerialNumber(new_serial_number) == 0)
+        //                        {
+        //                            FormatSerialNumber(last_serial_number + 1);
+        //                        }
+        //                        else
+        //                        {
+        //                            MessageBox.Show("Serial Number already exists");
+        //                            //Check if max limit has been reached for a product category in a month
+        //                            string count_serialnumbers_in_same_month_year_factoryID_query = "SELECT count(SerialNumber) as total FROM zeronext.serialnumbers where ProductCode  = " + AdminClass.ProductCode + " and FactoryID= " + AdminClass.FactoryID + " and year( SerialCreationDate ) = " + DateTime.Today.Year + " and month(SerialCreationDate) = " + DateTime.Today.Month + ";";
+        //                            int count_serialnumbers_in_same_month_year_factoryID = CountSerialNumbersInMonth(count_serialnumbers_in_same_month_year_factoryID_query);
+        //                            if (count_serialnumbers_in_same_month_year_factoryID >= Constants.MAXIMUM_SERIAL_NUMBER_LIMIT)
+        //                            {        
+        //                                MessageBox.Show("99,999 Serial Numbers have already been created for product category : " + AdminClass.ProductCode + " at FactoryID : " + AdminClass.FactoryID + " in " + DateTime.Today.ToString("yyyy-MM") + "(yyyy-mm).");                                       
+        //                            }
+        //                            return false;
+        //                        }
+        //                    }
+        //                    else if (last_serial_number >= Constants.MAXIMUM_SERIAL_NUMBER_LIMIT)
+        //                    {
+        //                        //start from 0 for this month.
+        //                        create_new_serial_number += AdminClass.FactoryID;
+        //                        create_new_serial_number += DateTime.Today.Year % 100;
+        //                        create_new_serial_number += DateTime.Today.Month.ToString("00");
+        //                        create_new_serial_number += AdminClass.ProductCode;
+        //                        create_new_serial_number += 1.ToString("00000");
+        //                        Int64.TryParse(create_new_serial_number, out new_serial_number);
+        //                        if (CheckNewSerialNumber(new_serial_number) == 0)
+        //                        {
+        //                            FormatSerialNumber(1);
+        //                        }
+        //                        else
+        //                        {
+        //                            MessageBox.Show("Serial Number already exists");
+        //                            return false;
+        //                        }
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    //first serial number for this product code
+        //                    //create first time serial number for this category
+        //                    FormatSerialNumber(1);
+        //                }
+
+        //            }
+        //        //}
+        //        catch (Exception ex)
+        //        {
+        //            MessageBox.Show("Error in creating serial number.");
+        //            return false;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        MessageBox.Show("Select DYMO Printer First");
+        //        return false;
+        //    }
+        //    return true;
+        //}
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void Create_Click(object sender, EventArgs e)
+        {
+            bool anyproblem = false;
+            serialNumbersList.Clear();
+            try
+            {
+
+                if (GetFormData())
+                {
+                    for (int i = 0; i < AdminClass.NumberOfSerialNumbers; i++)
+                    {
+                        if (okay())
+                            continue;
+                        else
+                            anyproblem = true;
+                        break;
+
+                    }
+                }
+                else
+                {
+                    anyproblem = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+            finally
+            {
+                if (!anyproblem)
+                    //MessageBox.Show("No Problems");
+                    CreateSerialNumbersExcel();
+            }
+        }
+
+        public bool okay()
         {
             int last_serial_number = 0;
             string last_serial_number_created_factory_id = string.Empty;
@@ -556,15 +697,15 @@ namespace Serial_Number_Generator
             string last_serial_number_created_month = string.Empty;
             string last_serial_number_created = string.Empty;
 
-            if (AdminClass.PrinterUsing != null)
-            {
+            //if (AdminClass.PrinterUsing != null)
+            //{
                 Int64 new_serial_number = 0;
                 string create_new_serial_number = string.Empty;
                 try
                 {
-                    //if (GetFormData())
-                    //{
-                        string lastserialnumberquery = "SELECT SerialNumber FROM serialnumbers where ProductCode='" + AdminClass.ProductCode + "' Order by serialNumberID desc limit 1;";
+                    if (GetFormData())
+                    {
+                        string lastserialnumberquery = "SELECT SerialNumber FROM serialnumbers where ProductCode=" + AdminClass.ProductCode + " Order by serialNumberID desc limit 1;";
                         Int64 serialnumberreturned = GetSerialNumberQuery(lastserialnumberquery);
 
                         //Length is 13. Not first time serial number for this product code
@@ -595,13 +736,12 @@ namespace Serial_Number_Generator
                                 {
                                     MessageBox.Show("Serial Number already exists");
                                     //Check if max limit has been reached for a product category in a month
-                                    string count_serialnumbers_in_same_month_year_factoryID_query = "SELECT count(SerialNumber) as total FROM zeronext.serialnumbers where ProductCode  = " + AdminClass.ProductCode + " and FactoryID= " + AdminClass.FactoryID + " and year( SerialCreationDate ) = " + DateTime.Today.Year + " and month(SerialCreationDate) = " + DateTime.Today.Month + ";";
+                                    string count_serialnumbers_in_same_month_year_factoryID_query = "SELECT count(SerialNumber) as total FROM zeronext.serialnumbers where ProductCode = " + AdminClass.ProductCode + " and FactoryID= " + AdminClass.FactoryID + " and year( SerialCreationDate ) = " + DateTime.Today.Year + " and month(SerialCreationDate) = " + DateTime.Today.Month + ";";
                                     int count_serialnumbers_in_same_month_year_factoryID = CountSerialNumbersInMonth(count_serialnumbers_in_same_month_year_factoryID_query);
                                     if (count_serialnumbers_in_same_month_year_factoryID >= Constants.MAXIMUM_SERIAL_NUMBER_LIMIT)
-                                    {        
-                                        MessageBox.Show("99,999 Serial Numbers have already been created for product category : " + AdminClass.ProductCode + " at FactoryID : " + AdminClass.FactoryID + " in " + DateTime.Today.ToString("yyyy-MM") + "(yyyy-mm).");                                       
+                                    {
+                                        MessageBox.Show("99,999 Serial Numbers have already been created for product category : " + AdminClass.ProductCode + " at FactoryID : " + AdminClass.FactoryID + " in " + DateTime.Today.ToString("yyyy-MM") + "(yyyy-mm).");
                                     }
-                                    return false;
                                 }
                             }
                             else if (last_serial_number >= Constants.MAXIMUM_SERIAL_NUMBER_LIMIT)
@@ -632,56 +772,116 @@ namespace Serial_Number_Generator
                         }
 
                     }
-                //}
+                }
                 catch (Exception ex)
                 {
                     MessageBox.Show("Error in creating serial number.");
                     return false;
                 }
-            }
-            else
-            {
-                MessageBox.Show("Select DYMO Printer First");
-                return false;
-            }
+            //}
+            //else
+            //{
+            //    MessageBox.Show("Select DYMO Printer First");
+            //    return false;
+            //}
             return true;
         }
+       
 
+        ////older working version - with original reqs given by grag hall - serial numbers tied to product code.
+        //public void Create_Click(object sender, EventArgs e)
+        //{
+        //    int last_serial_number = 0;
+        //    string last_serial_number_created_factory_id = string.Empty;
+        //    string last_serial_number_created_year = string.Empty;
+        //    string last_serial_number_created_month = string.Empty;
+        //    string last_serial_number_created = string.Empty;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public void Create_Click(object sender, EventArgs e)
-        {
-            bool anyproblem = false;
-            serialNumbersList.Clear();
-            try
-            {
-                
-                if (GetFormData())
-                {
-                    for (int i = 0; i < AdminClass.NumberOfSerialNumbers; i++)
-                    {
-                        if (StartSerialNumberCreation())
-                            continue;
-                        else
-                            anyproblem = true;
-                            break;
-                        
-                    }
-                }
-            }catch(Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }finally
-            {
-                if (!anyproblem)
-                    //MessageBox.Show("No Problems");
-                    CreateSerialNumbersExcel();
-            }
-        }
+        //    if (AdminClass.PrinterUsing != null)
+        //    {
+        //        Int64 new_serial_number = 0;
+        //        string create_new_serial_number = string.Empty;
+        //        try
+        //        {
+        //            if (GetFormData())
+        //            {
+        //                string lastserialnumberquery = "SELECT SerialNumber FROM serialnumbers where ProductCode=" + AdminClass.ProductCode + " Order by serialNumberID desc limit 1;";
+        //                Int64 serialnumberreturned = GetSerialNumberQuery(lastserialnumberquery);
+
+        //                //Length is 13. Not first time serial number for this product code
+        //                if (serialnumberreturned.ToString().Length == Constants.SERIAL_NUMBER_LENTH)
+        //                {
+        //                    //last_serial_number_created_factory_id = (serialnumberreturned.ToString()).Substring(0, 2);
+        //                    //last_serial_number_created_year = (serialnumberreturned.ToString()).Substring(2, 2);
+        //                    //last_serial_number_created_month = (serialnumberreturned.ToString()).Substring(4, 2);
+        //                    last_serial_number_created = (serialnumberreturned.ToString()).Substring(8, 5);
+        //                    Int32.TryParse(last_serial_number_created, out last_serial_number);
+
+        //                    //increment the serial number
+        //                    if (last_serial_number < Constants.MAXIMUM_SERIAL_NUMBER_LIMIT)
+        //                    {
+        //                        //then increment
+        //                        //serialnumberreturned++;
+        //                        create_new_serial_number += AdminClass.FactoryID;
+        //                        create_new_serial_number += DateTime.Today.Year % 100;
+        //                        create_new_serial_number += DateTime.Today.Month.ToString("00");
+        //                        create_new_serial_number += AdminClass.ProductCode;
+        //                        create_new_serial_number += (last_serial_number + 1).ToString("00000");
+        //                        Int64.TryParse(create_new_serial_number, out new_serial_number);
+        //                        if (CheckNewSerialNumber(new_serial_number) == 0)
+        //                        {
+        //                            FormatSerialNumber(last_serial_number + 1);
+        //                        }
+        //                        else
+        //                        {
+        //                            MessageBox.Show("Serial Number already exists");
+        //                            //Check if max limit has been reached for a product category in a month
+        //                            string count_serialnumbers_in_same_month_year_factoryID_query = "SELECT count(SerialNumber) as total FROM zeronext.serialnumbers where ProductCode = " + AdminClass.ProductCode + " and FactoryID= " + AdminClass.FactoryID + " and year( SerialCreationDate ) = " + DateTime.Today.Year + " and month(SerialCreationDate) = " + DateTime.Today.Month + ";";
+        //                            int count_serialnumbers_in_same_month_year_factoryID = CountSerialNumbersInMonth(count_serialnumbers_in_same_month_year_factoryID_query);
+        //                            if (count_serialnumbers_in_same_month_year_factoryID >= Constants.MAXIMUM_SERIAL_NUMBER_LIMIT)
+        //                            {
+        //                                MessageBox.Show("99,999 Serial Numbers have already been created for product category : " + AdminClass.ProductCode + " at FactoryID : " + AdminClass.FactoryID + " in " + DateTime.Today.ToString("yyyy-MM") + "(yyyy-mm).");
+        //                            }
+        //                        }
+        //                    }
+        //                    else if (last_serial_number >= Constants.MAXIMUM_SERIAL_NUMBER_LIMIT)
+        //                    {
+        //                        //start from 0 for this month.
+        //                        create_new_serial_number += AdminClass.FactoryID;
+        //                        create_new_serial_number += DateTime.Today.Year % 100;
+        //                        create_new_serial_number += DateTime.Today.Month.ToString("00");
+        //                        create_new_serial_number += AdminClass.ProductCode;
+        //                        create_new_serial_number += 1.ToString("00000");
+        //                        Int64.TryParse(create_new_serial_number, out new_serial_number);
+        //                        if (CheckNewSerialNumber(new_serial_number) == 0)
+        //                        {
+        //                            FormatSerialNumber(1);
+        //                        }
+        //                        else
+        //                        {
+        //                            MessageBox.Show("Serial Number already exists");
+        //                        }
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    //first serial number for this product code
+        //                    //create first time serial number for this category
+        //                    FormatSerialNumber(1);
+        //                }
+
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            MessageBox.Show("Error in creating serial number.");
+        //        }
+        //    }
+        //    else
+        //    {
+        //        MessageBox.Show("Select DYMO Printer First");
+        //    }
+        //} 
 
         void CreateSerialNumbersExcel()
         {
@@ -701,8 +901,8 @@ namespace Serial_Number_Generator
                 MessageBox.Show("Excel is not properly installed!!");
                 return;
             }
-
-            string fname = string.Format("{0}-{1:yyyy-MM-dd_hh-mm-ss-tt}",AdminClass.ModelNumber ,now);
+            string fname = string.Format("SerialNumbers");
+            //string fname = string.Format("{0}-{1:yyyy-MM-dd_hh-mm-ss-tt}",AdminClass.ModelNumber ,now);
 
             int a = 123456;
 
@@ -710,11 +910,13 @@ namespace Serial_Number_Generator
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 string filename = saveFileDialog1.FileName;
-
-                for (int i = 0; i < serialNumbersList.Count; i++)
+                sheett.Cells[1,1] = "Serial Number";
+                sheett.Cells[1,2] = "Model Number";
+                for (int i = 1; i <= serialNumbersList.Count; i++)
                 {
-                    //sheett.Cells[i + 1, 1] = serialNumbersList.ElementAt(i).ToString();
-                    sheett.Cells[i + 1, 1] = "1234567891234";
+                    sheett.Cells[i + 1, 1] = serialNumbersList.ElementAt(i-1).ToString();
+                    sheett.Cells[i + 1, 2] = AdminClass.ModelNumber;
+                    //sheett.Cells[i + 1, 1] = "1234567891234";
                 }
 
                 //saving the excel file        
@@ -723,9 +925,6 @@ namespace Serial_Number_Generator
                 appp.Quit();
                 MessageBox.Show("Success...File Created.");
             }
-
-            
-
         }
 
         private static int CheckNewSerialNumber(Int64 serialnumber)
@@ -786,115 +985,115 @@ namespace Serial_Number_Generator
             //label.Print("DYMO LabelWriter 450 Turbo");
         }
 
-        private void selectPrinterToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                PrintDialog printDialog = new PrintDialog();
-                DialogResult result = printDialog.ShowDialog();
-                if (result == DialogResult.OK)
-                {
-                    AdminClass.PrinterUsing = printDialog.PrinterSettings.PrinterName.Split('\\');
-                    if (AdminClass.PrinterUsing != null && AdminClass.PrinterUsing[AdminClass.PrinterUsing.Length - 1] != "DYMO LabelWriter 450 Turbo")
-                    {
-                        AdminClass.PrinterUsing = null;
-                        MessageBox.Show("This application is only compatible with DYMO LabelWriter 450 Turbo.");
-                    }
-                    else
-                    {
-                        PrinterLabel.Text = "Printer Selected : " + AdminClass.PrinterUsing[AdminClass.PrinterUsing.Length - 1];
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
-        }
+        //private void selectPrinterToolStripMenuItem_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        PrintDialog printDialog = new PrintDialog();
+        //        DialogResult result = printDialog.ShowDialog();
+        //        if (result == DialogResult.OK)
+        //        {
+        //            AdminClass.PrinterUsing = printDialog.PrinterSettings.PrinterName.Split('\\');
+        //            if (AdminClass.PrinterUsing != null && AdminClass.PrinterUsing[AdminClass.PrinterUsing.Length - 1] != "DYMO LabelWriter 450 Turbo")
+        //            {
+        //                AdminClass.PrinterUsing = null;
+        //                MessageBox.Show("This application is only compatible with DYMO LabelWriter 450 Turbo.");
+        //            }
+        //            else
+        //            {
+        //                PrinterLabel.Text = "Printer Selected : " + AdminClass.PrinterUsing[AdminClass.PrinterUsing.Length - 1];
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex.ToString());
+        //    }
+        //}
 
 
-        private ThermalLabel GenerateBasicThermalLabel()
-        {
-            //Define a ThermalLabel object and set unit to inch and label size
-            ThermalLabel tLabel = new ThermalLabel(UnitType.Inch, 4, 2.5);
-            tLabel.GapLength = 0.2;
+        //private ThermalLabel GenerateBasicThermalLabel()
+        //{
+        //    //Define a ThermalLabel object and set unit to inch and label size
+        //    ThermalLabel tLabel = new ThermalLabel(UnitType.Inch, 4, 2.5);
+        //    tLabel.GapLength = 0.2;
 
 
 
 
 
-            //Define a TextItem object
-            TextItem txtItem = new TextItem(0.2, 0.2, 2.5, 0.5, "Thermal Label Test");
+        //    //Define a TextItem object
+        //    TextItem txtItem = new TextItem(0.2, 0.2, 2.5, 0.5, "Thermal Label Test");
 
-            //LineShapeItem ln = new LineShapeItem(0.03, 0.05, 3.8, 2.3);
+        //    //LineShapeItem ln = new LineShapeItem(0.03, 0.05, 3.8, 2.3);
 
-            Neodynamic.SDK.Printing.LineShapeItem ln = new LineShapeItem(0.3, 0.5, 3.8, 2.3);
-            ln.StrokeColor = Neodynamic.SDK.Printing.Color.Black;
+        //    Neodynamic.SDK.Printing.LineShapeItem ln = new LineShapeItem(0.3, 0.5, 3.8, 2.3);
+        //    ln.StrokeColor = Neodynamic.SDK.Printing.Color.Black;
 
-            //Define a BarcodeItem object
-            //BarcodeItem bcItem = new BarcodeItem(0.2, 1, 2, 1, BarcodeSymbology.Code128, "ABC 12345");
-            //bcItem
-            //bcItem.BackColor = Neodynamic.SDK.Printing.Color.Black;
-            //bcItem.ForeColor = Neodynamic.SDK.Printing.Color.White;
-
-
-            //Set bars height to .75inch
-            //bcItem.BarHeight = 0.75;
-            //Set bars width to 0.0104inch
-            //bcItem.BarWidth = 0.0104;
-
-            //Add items to ThermalLabel object...
-            //tLabel.Items.Add(txtItem);
-            //tLabel.Items.Add(bcItem);
-            tLabel.Items.Add(ln);
-            _currentThermalLabel = tLabel;
-
-            return tLabel;
-        }
-
-        private void ZebraLabelPrintBtn_Click(object sender, EventArgs e)
-        {
-
-            //    //Display Print Job dialog...           
-            //    PrinterSettings _printerSettings = new PrinterSettings();
-            //    _printerSettings.Communication.CommunicationType = CommunicationType.USB;
-            //    _printerSettings.PrinterName = "ZDesigner GK420t (Copy 1)"; 
+        //    //Define a BarcodeItem object
+        //    //BarcodeItem bcItem = new BarcodeItem(0.2, 1, 2, 1, BarcodeSymbology.Code128, "ABC 12345");
+        //    //bcItem
+        //    //bcItem.BackColor = Neodynamic.SDK.Printing.Color.Black;
+        //    //bcItem.ForeColor = Neodynamic.SDK.Printing.Color.White;
 
 
-            //    //PrintJobDialog pjd = new PrintJobDialog();
-            //        //create a PrintJob object
-            //        using (PrintJob pj = new PrintJob(_printerSettings))
-            //        {
-            //            pj.Copies = 1; // set copies
-            //            pj.PrintOrientation = PrintOrientation.Landscape270; //set orientation
-            //            //pj.ThermalLabel = ThermalLabel.CreateFromXmlTemplate(System.IO.File.ReadAllText("..//..//ss.tl")); // set the ThermalLabel object
-            //            _currentThermalLabel = ThermalLabel.CreateFromXmlTemplate(System.IO.File.ReadAllText("..//..//ss.tl"));
-            //            using (XmlReader reader = XmlReader.Create("..//..//ss.tl"))
-            //            {
-            //                while (reader.Read())
-            //                {
-            //                    // Only detect start elements.
-            //                    if (reader.IsStartElement())
-            //                    {
-            //                        switch (reader.Name)
-            //                        {
-            //                            case "":
-            //                                //read the xml fiule, get the elements and change the value of the elements
-            //                                //create a new xml file, write the updated xml content,  and print it.
-            //                                ThermalLabel tl = new ThermalLabel();
-            //                                //load new xml template    
-            //                                tl.LoadXmlTemplate("");
-            //                                break;
-            //                        }
-            //                    }
-            //                }
-            //            }
-            //            pj.Print(); // print the ThermalLabel object                    
-            //        }
+        //    //Set bars height to .75inch
+        //    //bcItem.BarHeight = 0.75;
+        //    //Set bars width to 0.0104inch
+        //    //bcItem.BarWidth = 0.0104;
 
-            //}
+        //    //Add items to ThermalLabel object...
+        //    //tLabel.Items.Add(txtItem);
+        //    //tLabel.Items.Add(bcItem);
+        //    tLabel.Items.Add(ln);
+        //    _currentThermalLabel = tLabel;
 
-        }
+        //    return tLabel;
+        //}
+
+        //private void ZebraLabelPrintBtn_Click(object sender, EventArgs e)
+        //{
+
+        //    //    //Display Print Job dialog...           
+        //    //    PrinterSettings _printerSettings = new PrinterSettings();
+        //    //    _printerSettings.Communication.CommunicationType = CommunicationType.USB;
+        //    //    _printerSettings.PrinterName = "ZDesigner GK420t (Copy 1)"; 
+
+
+        //    //    //PrintJobDialog pjd = new PrintJobDialog();
+        //    //        //create a PrintJob object
+        //    //        using (PrintJob pj = new PrintJob(_printerSettings))
+        //    //        {
+        //    //            pj.Copies = 1; // set copies
+        //    //            pj.PrintOrientation = PrintOrientation.Landscape270; //set orientation
+        //    //            //pj.ThermalLabel = ThermalLabel.CreateFromXmlTemplate(System.IO.File.ReadAllText("..//..//ss.tl")); // set the ThermalLabel object
+        //    //            _currentThermalLabel = ThermalLabel.CreateFromXmlTemplate(System.IO.File.ReadAllText("..//..//ss.tl"));
+        //    //            using (XmlReader reader = XmlReader.Create("..//..//ss.tl"))
+        //    //            {
+        //    //                while (reader.Read())
+        //    //                {
+        //    //                    // Only detect start elements.
+        //    //                    if (reader.IsStartElement())
+        //    //                    {
+        //    //                        switch (reader.Name)
+        //    //                        {
+        //    //                            case "":
+        //    //                                //read the xml fiule, get the elements and change the value of the elements
+        //    //                                //create a new xml file, write the updated xml content,  and print it.
+        //    //                                ThermalLabel tl = new ThermalLabel();
+        //    //                                //load new xml template    
+        //    //                                tl.LoadXmlTemplate("");
+        //    //                                break;
+        //    //                        }
+        //    //                    }
+        //    //                }
+        //    //            }
+        //    //            pj.Print(); // print the ThermalLabel object                    
+        //    //        }
+
+        //    //}
+
+        //}
 
         public static class AdminClass
         {
